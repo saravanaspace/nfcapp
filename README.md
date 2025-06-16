@@ -103,3 +103,4 @@ This project is licensed under the MIT License - see the [LICENSE] file for deta
 - Material Design team
 - Android NFC documentation
 - Cursor
+- 
