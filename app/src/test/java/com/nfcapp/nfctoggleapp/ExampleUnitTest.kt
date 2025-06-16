@@ -1,4 +1,4 @@
-package com.example.nfcapp
+package com.nfcapp.nfctoggleapp
 
 import org.junit.Test
 

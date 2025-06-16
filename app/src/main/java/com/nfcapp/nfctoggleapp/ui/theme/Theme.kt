@@ -1,6 +1,5 @@
-package com.example.nfcapp.ui.theme
+package com.nfcapp.nfctoggleapp.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

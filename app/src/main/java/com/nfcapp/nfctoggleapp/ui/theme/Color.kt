@@ -1,4 +1,4 @@
-package com.example.nfcapp.ui.theme
+package com.nfcapp.nfctoggleapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
