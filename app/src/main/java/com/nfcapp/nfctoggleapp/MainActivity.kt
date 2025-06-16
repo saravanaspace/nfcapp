@@ -28,46 +28,32 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.tooling.preview.Preview
 
 class MainActivity : ComponentActivity() {
-    private var nfcAdapter: NfcAdapter? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Check NFC permission
+        // Check if NFC is supported
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_NFC)) {
             Toast.makeText(this, "NFC is not supported on this device", Toast.LENGTH_LONG).show()
             finish()
             return
         }
 
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
-        if (nfcAdapter == null) {
-            Toast.makeText(this, "NFC is not available on this device", Toast.LENGTH_LONG).show()
-            finish()
-            return
-        }
-
-        enableEdgeToEdge()
-        setContent {
-            NfcAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    NfcToggleScreen(nfcAdapter)
-                }
+        // Directly open NFC settings
+        try {
+            val intent = Intent(Settings.ACTION_NFC_SETTINGS).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Refresh NFC state when activity resumes
-        nfcAdapter?.let {
-            if (!it.isEnabled) {
-                Toast.makeText(this, "NFC is disabled", Toast.LENGTH_SHORT).show()
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Could not open NFC settings", Toast.LENGTH_SHORT).show()
             }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error opening NFC settings", Toast.LENGTH_SHORT).show()
         }
+        
+        // Close the app after opening settings
+        finish()
     }
 }
 
@@ -230,25 +216,9 @@ fun NfcToggleScreenPreviewEnabled() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "NFC is ON",
+                    text = "Opening NFC Settings...",
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.primary
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Switch(
-                    checked = true,
-                    onCheckedChange = { }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "NFC is enabled",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
                 )
             }
         }
